@@ -11,11 +11,11 @@ on:
       - main
 
 env:
-  AZURE_RESOURCE_GROUP: myAppResourceGroup
-  AZURE_ACR_NAME: myappacr123
-  AZURE_AKS_NAME: myAppAKSCluster
+  AZURE_RESOURCE_GROUP: capstonerg
+  AZURE_ACR_NAME: capstoneacrsamb
+  AZURE_AKS_NAME: capstoneaksclusameerb
   SONAR_HOST_URL: https://sonarcloud.io
-  SONAR_PROJECT_KEY: my-nodejs-microservice
+  SONAR_PROJECT_KEY: SameerBramhecha_automated_web_application_deployment
 
 jobs:
   build:
