@@ -181,12 +181,12 @@ jobs:
       - name: Replace Image Tag in Deployment
         if: env.exists == 'true'
         run: |
-          sed -i "s/\${IMAGE_TAG}/${{ github.sha }}/g" k8s/deployment.yaml
+          sed -i "s/\${IMAGE_TAG}/${{ github.sha }}/g" deployments.yaml
 
       - name: Apply Kubernetes Deployment
         if: env.exists == 'false'
         run: |
-          kubectl apply -f k8s/deployment.yaml
+          kubectl apply -f deployments.yaml
 
       - name: Verify Deployment Creation
         if: env.exists == 'false'
