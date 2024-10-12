@@ -1,0 +1,17 @@
+# k8s/service.yaml
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: nodejs-microservice-service
+  labels:
+    app: nodejs-microservice
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: 3000
+      protocol: TCP
+      name: http
+  selector:
+    app: nodejs-microservice
