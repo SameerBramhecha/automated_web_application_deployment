@@ -4,7 +4,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 app.get('/', (req, res) => {
-    res.send('Hello from Node.js Microservice!');
+    res.send('Hello from Node.js Microservice! 2');
 });
 
 app.listen(port, () => {
