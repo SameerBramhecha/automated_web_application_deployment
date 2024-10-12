@@ -182,12 +182,12 @@ jobs:
       - name: Apply Kubernetes Deployment
         if: env.exists == 'false'
         run: |
-          kubectl apply -f deployment.yaml
+          kubectl apply -f k8s/deployment.yaml
 
       - name: Apply Kubernetes Service
         if: env.exists == 'false'
         run: |
-          kubectl apply -f service.yaml
+          kubectl apply -f k8s/service.yaml
 
       - name: Verify Deployment Creation
         if: env.exists == 'false'
