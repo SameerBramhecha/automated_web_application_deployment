@@ -76,7 +76,7 @@ jobs:
           terraform init
           terraform import azurerm_resource_group.rg /subscriptions/${{secrets.ARM_SUBSCRIPTION_ID}}/resourceGroups/capstonerg || true
 
-       - name: Import AKS Cluster
+      - name: Import AKS Cluster
         working-directory: infrastructure
         run: |
           terraform import azurerm_kubernetes_cluster.aks /subscriptions/${{secrets.ARM_SUBSCRIPTION_ID}}/resourceGroups/capstonerg/providers/Microsoft.ContainerService/managedClusters/capstoneaksclusameerb || true
