@@ -1,9 +1,23 @@
+
 # infrastructure/variables.tf
 variable "subscription_id" {
     description = "Azure Subscription ID"
     type = string
-    default = "6e4cb903-6eb9-46fd-b7ac-8f91ff9aedcf"
+
 }
+variable "tenant_id" {
+    description = "Azure Tenant ID"
+    type = string
+
+}
+
+variable "client_id" {
+    description = "Azure Client ID"
+    type = string
+
+}
+
+
 variable "resource_group_name" {
   description = "Name of the Azure Resource Group"
   type        = string
