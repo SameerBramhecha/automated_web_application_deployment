@@ -185,7 +185,7 @@ jobs:
           kubectl apply -f k8s/deployment.yaml
 
       - name: Apply Kubernetes Service
-        if: env.exists == 'false'
+        if: env.exists == 'true'
         run: |
           kubectl apply -f k8s/service.yaml
 
