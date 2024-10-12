@@ -1,3 +1,5 @@
+# .github/workflows/ci-cd.yml
+
 name: CI/CD Pipeline
 
 on:
@@ -50,10 +52,10 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     env:
-      TF_VAR_subscription_id : ${{ secrets.ARM_SUBSCRIPTION_ID}}
-      TF_VAR_tenant_id : ${{ secrets.ARM_TENANT_ID}}
-      TF_VAR_client_id : ${{ secrets.ARM_CLIENT_ID}}
-      TF_VAR_client_secret : ${{ secrets.ARM_CLIENT_SECRET}}
+      TF_VAR_subscription_id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+      TF_VAR_tenant_id: ${{ secrets.ARM_TENANT_ID }}
+      TF_VAR_client_id: ${{ secrets.ARM_CLIENT_ID }}
+      TF_VAR_client_secret: ${{ secrets.ARM_CLIENT_SECRET }}
     environment: production
 
     steps:
@@ -74,17 +76,17 @@ jobs:
         working-directory: infrastructure
         run: |
           terraform init
-          terraform import azurerm_resource_group.rg /subscriptions/${{secrets.ARM_SUBSCRIPTION_ID}}/resourceGroups/capstonerg || true
+          terraform import azurerm_resource_group.rg /subscriptions/${{ secrets.ARM_SUBSCRIPTION_ID }}/resourceGroups/capstonerg || true
 
       - name: Import AKS Cluster
         working-directory: infrastructure
         run: |
-          terraform import azurerm_kubernetes_cluster.aks /subscriptions/${{secrets.ARM_SUBSCRIPTION_ID}}/resourceGroups/capstonerg/providers/Microsoft.ContainerService/managedClusters/capstoneaksclusameerb || true
+          terraform import azurerm_kubernetes_cluster.aks /subscriptions/${{ secrets.ARM_SUBSCRIPTION_ID }}/resourceGroups/capstonerg/providers/Microsoft.ContainerService/managedClusters/capstoneaksclusameerb || true
 
       - name: Import ACR
         working-directory: infrastructure
         run: |
-          terraform import azurerm_container_registry.acr /subscriptions/${{secrets.ARM_SUBSCRIPTION_ID}}/resourceGroups/capstonerg/providers/Microsoft.ContainerRegistry/registries/capstoneacrsamb || true
+          terraform import azurerm_container_registry.acr /subscriptions/${{ secrets.ARM_SUBSCRIPTION_ID }}/resourceGroups/capstonerg/providers/Microsoft.ContainerRegistry/registries/capstoneacrsamb || true
 
       - name: Terraform Init
         working-directory: infrastructure
@@ -93,7 +95,6 @@ jobs:
       - name: Terraform Validate
         working-directory: infrastructure
         run: terraform validate
-
 
       - name: Terraform Plan
         working-directory: infrastructure
@@ -178,15 +179,15 @@ jobs:
             echo "exists=false" >> $GITHUB_ENV
           fi
 
-      - name: Replace Image Tag in Deployment
-        if: env.exists == 'true'
-        run: |
-          sed -i "s/\${IMAGE_TAG}/${{ github.sha }}/g" .github/workflows/deployments.yaml
-
       - name: Apply Kubernetes Deployment
         if: env.exists == 'false'
         run: |
-          kubectl apply -f .github/workflows/deployments.yaml
+          kubectl apply -f deployment.yaml
+
+      - name: Apply Kubernetes Service
+        if: env.exists == 'false'
+        run: |
+          kubectl apply -f service.yaml
 
       - name: Verify Deployment Creation
         if: env.exists == 'false'
@@ -202,6 +203,21 @@ jobs:
         if: env.exists == 'true'
         run: |
           kubectl rollout status deployment/nodejs-microservice-deployment
+
+      - name: Wait for External IP
+        run: |
+          echo "Waiting for external IP..."
+          for i in {1..30}; do
+            EXTERNAL_IP=$(kubectl get svc nodejs-microservice-service -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+            if [ -n "$EXTERNAL_IP" ]; then
+              echo "External IP assigned: $EXTERNAL_IP"
+              exit 0
+            fi
+            echo "External IP not assigned yet. Waiting..."
+            sleep 10
+          done
+          echo "External IP not assigned within expected time."
+          exit 1
 
       - name: Get Service External IP
         run: |
