@@ -176,7 +176,7 @@ jobs:
       - name: Create Kubernetes Deployment
         if: steps.deployment-check.outputs.exists == 'false'
         run: |
-          kubectl apply -f deployments.yaml
+          kubectl apply -f /github/workflows/deployments.yaml
 
       - name: Update Kubernetes Deployment
         if: steps.deployment-check.outputs.exists == 'true'
