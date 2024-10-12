@@ -75,7 +75,16 @@ jobs:
         run: |
           terraform init
           terraform import azurerm_resource_group.rg /subscriptions/${{secrets.ARM_SUBSCRIPTION_ID}}/resourceGroups/capstonerg || true
-          # The `|| true` part will ignore the error if the resource was already imported.
+
+       - name: Import AKS Cluster
+        working-directory: infrastructure
+        run: |
+          terraform import azurerm_kubernetes_cluster.aks /subscriptions/${{secrets.ARM_SUBSCRIPTION_ID}}/resourceGroups/capstonerg/providers/Microsoft.ContainerService/managedClusters/capstoneaksclusameerb || true
+
+      - name: Import ACR
+        working-directory: infrastructure
+        run: |
+          terraform import azurerm_container_registry.acr /subscriptions/${{secrets.ARM_SUBSCRIPTION_ID}}/resourceGroups/capstonerg/providers/Microsoft.ContainerRegistry/registries/capstoneacrsamb || true
 
       - name: Terraform Init
         working-directory: infrastructure
