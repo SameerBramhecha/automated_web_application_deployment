@@ -61,12 +61,20 @@ jobs:
           terraform_version: 1.3.0
 
       - name: Terraform Init
+        working-directory: infrastructure
         run: terraform init
 
+      - name: Terraform Validate
+        working-directory: infrastructure
+        run: terraform validate
+
+
       - name: Terraform Plan
+        working-directory: infrastructure
         run: terraform plan -out=tfplan
 
       - name: Terraform Apply
+        working-directory: infrastructure
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: |
           set -e  # Fail the job if any command fails
