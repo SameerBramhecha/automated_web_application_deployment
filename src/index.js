@@ -1,4 +1,3 @@
-// src/index.js
 const express = require('express');
 const path = require('path');
 
@@ -14,11 +13,11 @@ app.use(express.static(path.join(__dirname, '../public')));
 
 // Render the landing page
 app.get('/', (req, res) => {
-  res.render('index');
+    res.render('index');
 });
+
 // Health check route
 app.get('/healthz', (req, res) => {
-    // Optionally, perform additional health checks here (e.g., database connectivity)
     res.status(200).send('OK');
 });
 
@@ -27,7 +26,13 @@ app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).send('Internal Server Error');
 });
-// Start the server
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
+
+// Export the app without starting the server
+module.exports = app;
+
+// If this file is run directly, start the server
+if (require.main === module) {
+    app.listen(PORT, () => {
+        console.log(`Server is running on http://localhost:${PORT}`);
+    });
+}
