@@ -18,7 +18,8 @@ spec:
     spec:
       containers:
         - name: nodejs-microservice
-          image: capstoneacrsamb.azurecr.io/nodejs-microservice:latest  # Initial image tag
+          image: capstoneacrsamb.azurecr.io/nodejs-microservice:{{GITHUB_SHA}}
+
           ports:
             - containerPort: 3000  # Port your application listens on
           env:
