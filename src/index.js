@@ -1,6 +1,5 @@
 const express = require('express');
 const path = require('path');
-
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -13,19 +12,18 @@ app.use(express.static(path.join(__dirname, '../public')));
 
 // Render the landing page
 app.get('/', (req, res) => {
-    res.render('index');
+    res.render('index.ejs');
 });
 
 // Health check route
 app.get('/healthz', (req, res) => {
     res.status(200).send('OK');
 });
-
-// Error handling middleware
-app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).send('Internal Server Error');
-});
+// // Error handling middleware
+// app.use((err, req, res, next) => {
+//     console.error(err.stack);
+//     res.status(500).send('Internal Server Error');
+// });
 
 // Export the app without starting the server
 module.exports = app;
