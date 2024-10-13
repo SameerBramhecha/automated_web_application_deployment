@@ -16,7 +16,17 @@ app.use(express.static(path.join(__dirname, '../public')));
 app.get('/', (req, res) => {
   res.render('index');
 });
+// Health check route
+app.get('/healthz', (req, res) => {
+    // Optionally, perform additional health checks here (e.g., database connectivity)
+    res.status(200).send('OK');
+});
 
+// Error handling middleware
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Internal Server Error');
+});
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
