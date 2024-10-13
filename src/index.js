@@ -10,8 +10,9 @@ app.set('views', path.join(__dirname, '../views')); // Path to the views folder
 // Serve static files like CSS from the 'public' directory
 app.use(express.static(path.join(__dirname, '../public')));
 
+
 // Render the landing page
-app.get('/', (req, res) => {
+app.get('/home', (req, res) => {
     res.render('index.ejs');
 });
 

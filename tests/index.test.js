@@ -6,7 +6,7 @@ const app = require('../src/index');  // Import the app directly
 describe('Node.js Application', () => {
 
     it('should return the landing page with status 200', async () => {
-        const res = await request(app).get('/');
+        const res = await request(app).get('/home');
         expect(res.statusCode).toBe(200);
         expect(res.text).toContain('<title>');  // Assuming 'index.ejs' contains a <title> tag
     });
